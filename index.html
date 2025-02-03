@@ -5,14 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KG Beta Phase S1 Model - AI Chatbot</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #0d1117; color: white; text-align: center; margin: 0; padding: 0; }
-        .chat-container { width: 90%; max-width: 500px; margin: 50px auto; background: #161b22; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1); }
-        .chat-box { height: 400px; overflow-y: auto; border: 1px solid #30363d; padding: 10px; text-align: left; background: #0d1117; border-radius: 5px; font-size: 16px; }
-        .user-message { background: #238636; padding: 8px; border-radius: 5px; margin: 5px 0; text-align: right; }
-        .bot-message { background: #30363d; padding: 8px; border-radius: 5px; margin: 5px 0; }
-        input { width: 70%; padding: 10px; margin-top: 10px; border-radius: 5px; border: none; background: #161b22; color: white; }
-        button { width: 20%; padding: 10px; background: #238636; color: white; border: none; cursor: pointer; border-radius: 5px; }
-        footer { margin-top: 10px; font-size: 14px; }
+        /* ChatGPT-like UI */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d1117;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            background: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #30363d;
+            padding: 10px;
+            text-align: left;
+            background: #0d1117;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .user-message {
+            background: #238636;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-align: right;
+        }
+        .bot-message {
+            background: #30363d;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        input {
+            width: 70%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+            background: #161b22;
+            color: white;
+        }
+        button {
+            width: 20%;
+            padding: 10px;
+            background: #238636;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        footer {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .loading {
+            font-style: italic;
+            color: gray;
+        }
     </style>
 </head>
 <body>
@@ -27,16 +89,20 @@
     </div>
 
     <footer>
-        <p>Made by <b>Kabya Ghosh</b> 🚀 | Science Project | v1.1 (Self-Learning)</p>
+        <p>Made by <b>Kabya Ghosh</b> 🚀 | Science Project | v1.0</p>
     </footer>
 
     <script>
-        let responses = JSON.parse(localStorage.getItem("kg_chatbot")) || {
+        const responses = {
             "hello": "Hey there! How can I assist you today?",
             "who are you": "I am KG Beta Phase S1, an AI chatbot created by Kabya Ghosh!",
-            "who is bd pm": "The current Prime Minister of Bangladesh is Sheikh Hasina.",
-            "bye": "Goodbye! Have a great day! 😊",
-            "what can you do": "I can chat, do math, and learn from you!"
+            "your creator": "I was designed by Kabya Ghosh for a school science project!",
+            "how are you": "I'm just a chatbot, but I'm doing great! Thanks for asking.",
+            "bye": "Goodbye! Have a fantastic day! 😊",
+            "what can you do": "I can chat, do math, and give smart responses!",
+            "tell me a joke": "Why don’t programmers like nature? Too many bugs! 😂",
+            "your name": "I am KG Beta Phase S1 Model!",
+            "who is kabya": "Kabya Ghosh is a robotics and coding enthusiast from Bangladesh! 🇧🇩"
         };
 
         function sendMessage() {
@@ -76,7 +142,7 @@
                 return calculateMath(userText);
             }
 
-            return teachBot(userText);
+            return "I'm not sure about that. Try asking something else!";
         }
 
         function isMathExpression(text) {
@@ -91,33 +157,6 @@
                 return "Oops! That math expression seems incorrect.";
             }
         }
-
-        function teachBot(userText) {
-            let chatBox = document.getElementById("chat-box");
-            let botMessage = `<p class="bot-message">Bot: I don't know the answer. Can you teach me? Type: "Teach: your question | your answer"</p>`;
-            chatBox.innerHTML += botMessage;
-            return "";
-        }
-
-        document.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                let inputField = document.getElementById("user-input");
-                let userText = inputField.value.trim().toLowerCase();
-
-                if (userText.startsWith("teach:")) {
-                    let parts = userText.substring(6).split("|");
-                    if (parts.length === 2) {
-                        let question = parts[0].trim();
-                        let answer = parts[1].trim();
-                        responses[question] = answer;
-                        localStorage.setItem("kg_chatbot", JSON.stringify(responses));
-                        let chatBox = document.getElementById("chat-box");
-                        chatBox.innerHTML += `<p class="bot-message">Bot: Got it! I will remember this.</p>`;
-                    }
-                    inputField.value = "";
-                }
-            }
-        });
     </script>
 
 </body>
