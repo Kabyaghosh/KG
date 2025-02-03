@@ -27,7 +27,7 @@
     </div>
 
     <footer>
-        <p>Made by <b>Kabya Ghosh</b> 🚀 | Science Project | v1.1 (Self-Learning)</p>
+        <p>Made by <b>Kabya Ghosh</b> 🚀 | Science Project | v1.2 (Enhanced AI)</p>
     </footer>
 
     <script>
@@ -36,7 +36,13 @@
             "who are you": "I am KG Beta Phase S1, an AI chatbot created by Kabya Ghosh!",
             "who is bd pm": "The current Prime Minister of Bangladesh is Sheikh Hasina.",
             "bye": "Goodbye! Have a great day! 😊",
-            "what can you do": "I can chat, do math, and learn from you!"
+            "what can you do": "I can chat, do math, and learn from you!",
+            "tell me a joke": "Why did the robot go on a diet? Because it had too many bytes! 😂",
+            "your name": "I am KG Beta Phase S1 Model!",
+            "who is kabya": "Kabya Ghosh is a robotics and coding enthusiast from Bangladesh! 🇧🇩",
+            "current year": "It's 2025 right now!",
+            "favorite programming language": "I love Python because it's so versatile and powerful!",
+            "who invented ai": "Artificial Intelligence was pioneered by Alan Turing, among others."
         };
 
         function sendMessage() {
@@ -66,10 +72,17 @@
         }
 
         function getResponse(userText) {
+            let bestMatch = { key: null, score: 0 };
+
             for (let key in responses) {
-                if (userText.includes(key)) {
-                    return responses[key];
+                let matchScore = similarity(userText, key);
+                if (matchScore > bestMatch.score) {
+                    bestMatch = { key, score: matchScore };
                 }
+            }
+
+            if (bestMatch.score > 0.3) {
+                return responses[bestMatch.key];
             }
 
             if (isMathExpression(userText)) {
@@ -97,6 +110,13 @@
             let botMessage = `<p class="bot-message">Bot: I don't know the answer. Can you teach me? Type: "Teach: your question | your answer"</p>`;
             chatBox.innerHTML += botMessage;
             return "";
+        }
+
+        function similarity(str1, str2) {
+            const words1 = str1.split(" ");
+            const words2 = str2.split(" ");
+            const commonWords = words1.filter(word => words2.includes(word));
+            return commonWords.length / Math.max(words1.length, words2.length);
         }
 
         document.addEventListener("keypress", function(event) {
