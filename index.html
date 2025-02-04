@@ -2128,42 +2128,76 @@
         }
 
         function getResponse(userText) {
-            userText = userText.toLowerCase().trim();
+    userText = userText.toLowerCase().trim();
+    
+    // Step 1: Exact match check
+    if (responses[userText]) {
+        return responses[userText];
+    }
 
-            // Step 1: Exact match
-            if (responses[userText]) {
-                return responses[userText];
-            }
+    // Step 2: Find best match using advanced similarity
+    let bestMatch = null;
+    let bestScore = 0;
 
-            // Step 2: Similarity check (optional, allows slight variations)
-            let bestMatch = null;
-            let bestScore = 0;
-
-            for (let key in responses) {
-                let score = similarity(userText, key);
-                if (score > 0.6 && score > bestScore) {  
-                    bestMatch = key;
-                    bestScore = score;
-                }
-            }
-
-            if (bestMatch) return responses[bestMatch];
-
-            // Step 3: Teach bot if no match
-            return teachBot(userText);
+    for (let key in responses) {
+        let score = getSimilarity(userText, key); // Improved matching logic
+        if (score > bestScore && score >= 0.5) { // Threshold to prevent bad matches
+            bestMatch = key;
+            bestScore = score;
         }
+    }
 
-        function similarity(s1, s2) {
-            let longer = s1.length > s2.length ? s1 : s2;
-            let shorter = s1.length > s2.length ? s2 : s1;
-            let matchCount = 0;
-            
-            for (let i = 0; i < shorter.length; i++) {
-                if (longer[i] === shorter[i]) matchCount++;
+    // If a good match is found, return it
+    if (bestMatch) return responses[bestMatch];
+
+    // Step 3: Teach bot if no match is found
+    return teachBot(userText);
+}
+
+// Improved similarity function (combining Levenshtein & Jaccard)
+function getSimilarity(s1, s2) {
+    let levDist = levenshtein(s1, s2);
+    let jaccard = jaccardSimilarity(s1, s2);
+    
+    // Weighted scoring: 70% Jaccard, 30% Levenshtein (adjust as needed)
+    return (jaccard * 0.7) + ((1 - levDist) * 0.3);
+}
+
+// Levenshtein Distance (Measures typo tolerance)
+function levenshtein(a, b) {
+    let tmp, i, j, prev, val, row;
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    
+    row = Array(b.length + 1);
+    for (i = 0; i <= b.length; i++) row[i] = i;
+    
+    for (i = 0; i < a.length; i++) {
+        prev = i + 1;
+        for (j = 0; j < b.length; j++) {
+            val = row[j];
+            if (a[i] !== b[j]) {
+                val = Math.min(row[j + 1] + 1, prev + 1, val + 1);
             }
-
-            return matchCount / longer.length;
+            row[j] = prev;
+            prev = val;
         }
+        row[b.length] = prev;
+    }
+    
+    return row[b.length] / Math.max(a.length, b.length); // Normalize to 0-1
+}
+
+// Jaccard Similarity (Measures intent overlap)
+function jaccardSimilarity(str1, str2) {
+    let set1 = new Set(str1.split(" "));
+    let set2 = new Set(str2.split(" "));
+    
+    let intersection = new Set([...set1].filter(x => set2.has(x)));
+    let union = new Set([...set1, ...set2]);
+    
+    return intersection.size / union.size; // 0-1 score
+}
 
         function isMathExpression(text) {
             return /^[0-9+\-*/().\s]+$/.test(text);
