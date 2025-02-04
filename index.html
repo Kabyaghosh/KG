@@ -318,17 +318,41 @@
         }
 
         function getResponse(userText) {
-            for (let key in responses) {
-                if (userText.includes(key) || similarity(userText, key) > 0.5) {
-                    return responses[key];
-                }
-            } 
+            userText = userText.toLowerCase().trim();
 
-            if (isMathExpression(userText)) {
-                return calculateMath(userText);
+            // Step 1: Exact match
+            if (responses[userText]) {
+                return responses[userText];
             }
 
+            // Step 2: Similarity check (optional, allows slight variations)
+            let bestMatch = null;
+            let bestScore = 0;
+
+            for (let key in responses) {
+                let score = similarity(userText, key);
+                if (score > 0.6 && score > bestScore) {  
+                    bestMatch = key;
+                    bestScore = score;
+                }
+            }
+
+            if (bestMatch) return responses[bestMatch];
+
+            // Step 3: Teach bot if no match
             return teachBot(userText);
+        }
+
+        function similarity(s1, s2) {
+            let longer = s1.length > s2.length ? s1 : s2;
+            let shorter = s1.length > s2.length ? s2 : s1;
+            let matchCount = 0;
+            
+            for (let i = 0; i < shorter.length; i++) {
+                if (longer[i] === shorter[i]) matchCount++;
+            }
+
+            return matchCount / longer.length;
         }
 
         function isMathExpression(text) {
@@ -348,12 +372,8 @@
             let chatBox = document.getElementById("chat-box");
             let botMessage = `<p class="bot-message">Bot: I don't know the answer. Can you teach me? Type: "Teach: your question | your answer"</p>`;
             chatBox.innerHTML += botMessage;
-            return "";
-        }
-
-        function similarity(str1, str2) {
-            let common = str1.split(' ').filter(word => str2.includes(word)).length;
-            return common / Math.max(str1.split(' ').length, str2.split(' ').length);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to new message
+            return "I don't know, please teach me!";
         }
 
         document.addEventListener("keypress", function(event) {
