@@ -318,11 +318,27 @@
         }
 
         function getResponse(userText) {
-            for (let key in responses) {
-                if (userText.includes(key) || similarity(userText, key) > 0.5) {
-                    return responses[key];
-                }
-            }
+    userText = userText.toLowerCase().trim(); // Normalize input for better matching
+
+    // Step 1: Exact match
+    if (responses[userText]) {
+        return responses[userText];
+    }
+
+    // Step 2: Similarity check (Only if no exact match)
+    let bestMatch = null;
+    let bestScore = 0;
+
+    for (let key in responses) {
+        let score = similarity(userText, key);
+        if (score > 0.5 && score > bestScore) { // Find the best match
+            bestMatch = key;
+            bestScore = score;
+        }
+    }
+
+    return bestMatch ? responses[bestMatch] : "Sorry, I don’t understand that.";
+}
 
             if (isMathExpression(userText)) {
                 return calculateMath(userText);
