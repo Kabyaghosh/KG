@@ -3736,7 +3736,8 @@
             setTimeout(() => {
                 document.getElementById("typing-indicator").style.display = "none"; // Hide typing
                 displayBotResponse(userText);
-            }, Math.random() * 2000 + 1000); // Random delay 1-3 sec
+            }, Math.random() * 2000 + 1000);
+        }// Random delay 1-3 sec
 
         function handleKeyPress(event) {
             if (event.key === "Enter") {
