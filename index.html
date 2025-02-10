@@ -142,45 +142,47 @@
             width: 100%;
         }
 
-                   .header-container {
+                       .header-container {
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 15px;
             width: 100%;
-            animation: fadeInHeader 1s ease-in-out 2s forwards; /* Animation after 2 seconds */
+            animation: fadeInHeader 2s ease-in-out 2s forwards; /* Animation after 2 seconds */
         }
 
         .logo {
-            width: 30px;
-            height: 30px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             margin-right: 10px;
             opacity: 0;
-            animation: fadeInLogo 1s ease-in-out 2s forwards; /* Animation for logo after 2 seconds */
+            transform: rotateX(-90deg); /* Start with rotation for 3D effect */
+            animation: logoAnimation 2s ease-in-out 2s forwards; /* Animation for logo */
         }
 
         h2 {
             margin: 0;
-            font-size: 24px;
+            font-size: 30px;
             opacity: 0;
-            animation: fadeInText 1s ease-in-out 2s forwards; /* Animation for text after 2 seconds */
+            transform: rotateX(90deg); /* Start with rotation for 3D effect */
+            animation: textAnimation 2s ease-in-out 2s forwards; /* Animation for text */
         }
 
-        /* Keyframes for animations */
+        /* 3D Animation Keyframes */
         @keyframes fadeInHeader {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
-        @keyframes fadeInLogo {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes logoAnimation {
+            from { opacity: 0; transform: rotateX(-90deg); }
+            to { opacity: 1; transform: rotateX(0); }
         }
 
-        @keyframes fadeInText {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes textAnimation {
+            from { opacity: 0; transform: rotateX(90deg); }
+            to { opacity: 1; transform: rotateX(0); }
         }
     </style>
 </head>
