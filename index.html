@@ -3767,15 +3767,15 @@
            
         };
 
-        function sendMessage() {
-            let inputField = document.getElementById("user-input");
+        function displayBotResponse(userText) {
+            let chatBox = document.getElementById("chat-box");
             let userText = inputField.value.trim();
             let chatBox = document.getElementById("chat-box");
 
             if (userText === "") return;
 
-            let userMessage = document.createElement("div");
-            userMessage.classList.add("message", "user-message");
+            let botMessage = document.createElement("div");
+            botMessage.classList.add("message", "bot-message");
             userMessage.textContent = userText;
             chatBox.appendChild(userMessage);
 
@@ -3796,24 +3796,24 @@
                 sendMessage();
             }
         }
-function displayBotResponse(userText) {
-            let chatBox = document.getElementById("chat-box");
-            let botMessage = document.createElement("div");
-            botMessage.classList.add("message", "bot-message");
+
+            
+            
+            
 
             let botIcon = document.createElement("img");
             botIcon.src = "IMG_0504.png"; 
             botIcon.alt = "Bot";
 
             let responseText = document.createElement("span");
-            responseText.textContent = responses[userText.toLowerCase()] || "I don't know that yet, but you can teach me!";
+            
 
             botMessage.appendChild(botIcon);
             botMessage.appendChild(responseText);
             chatBox.appendChild(botMessage);
 
             chatBox.scrollTop = chatBox.scrollHeight;
-        }
+        
 
         
         function getResponse(userText) {
