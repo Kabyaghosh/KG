@@ -3744,7 +3744,26 @@
                 sendMessage();
             }
         }
+function displayBotResponse(userText) {
+            let chatBox = document.getElementById("chat-box");
+            let botMessage = document.createElement("div");
+            botMessage.classList.add("message", "bot-message");
 
+            let botIcon = document.createElement("img");
+            botIcon.src = "https://cdn-icons-png.flaticon.com/512/4712/4712033.png"; 
+            botIcon.alt = "Bot";
+
+            let responseText = document.createElement("span");
+            responseText.textContent = responses[userText.toLowerCase()] || "I don't know that yet, but you can teach me!";
+
+            botMessage.appendChild(botIcon);
+            botMessage.appendChild(responseText);
+            chatBox.appendChild(botMessage);
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        
         function getResponse(userText) {
     userText = userText.toLowerCase().trim();
     
