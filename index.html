@@ -142,50 +142,48 @@
             width: 100%;
         }
 
-                 .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    width: 100%;
-    position: relative; /* To help position the logo and text correctly */
-}
+                    .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            width: 100%;
+            animation: fadeInHeader 1s ease-in-out 0.5s forwards; /* Reduced animation delay */
+        }
 
-.logo {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-    opacity: 0;
-    transform: translateX(0) rotateX(-90deg); /* Start at the center */
-    animation: logoAnimation 1s ease-in-out 0s forwards, slideLeft 1s ease-in-out 1s forwards; /* Fade in and then slide left */
-}
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            opacity: 0;
+            transform: rotateX(-90deg); /* Start with rotation for 3D effect */
+            animation: logoAnimation 1s ease-in-out 0.5s forwards; /* Reduced animation delay */
+        }
 
-h2 {
-    margin: 0;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateX(50px) rotateX(90deg); /* Start from the right */
-    animation: textAnimation 1.5s ease-in-out 2s forwards; /* Fade in after the logo animation */
-}
+        h2 {
+            margin: 0;
+            font-size: 30px;
+            opacity: 0;
+            transform: rotateX(90deg); /* Start with rotation for 3D effect */
+            animation: textAnimation 1s ease-in-out 0.5s forwards; /* Reduced animation delay */
+        }
 
-/* 3D Animation Keyframes */
-@keyframes fadeInHeader {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        /* 3D Animation Keyframes */
+        @keyframes fadeInHeader {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
+        @keyframes logoAnimation {
+            from { opacity: 0; transform: rotateX(-90deg); }
+            to { opacity: 1; transform: rotateX(0); }
+        }
 
-
-@keyframes slideLeft {
-    from { transform: translateX(80px); }
-    to { transform: translateX(-10px); } /* Slide logo to the left */
-}
-
-@keyframes textAnimation {
-    from { opacity: 0; transform: translateX(0px) rotateX(90deg); }
-    to { opacity: 1; transform: translateX(0) rotateX(0); } /* Fade in the text */
-}
+        @keyframes textAnimation {
+            from { opacity: 0; transform: rotateX(90deg); }
+            to { opacity: 1; transform: rotateX(0); }
+        }
     </style>
 </head>
 <body>
