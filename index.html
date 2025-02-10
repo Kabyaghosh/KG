@@ -142,19 +142,33 @@
             width: 100%;
         }
 
-        .logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+               .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: left;
             margin-bottom: 15px;
+        }
+
+        .logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
 
     <div class="chat-container">
-                <img src="IMG_0504.png" alt="Bot Logo" class="logo">
-        <h2>KGs1 Beta</h2>
+                        <div class="header-container">
+            <img src="IMG_0504.png" alt="Bot Logo" class="logo">
+            <h2>KGs1 Beta</h2>
+        </div>
         <div class="chat-box" id="chat-box">
             <div class="message bot-message">
                 <img src="IMG_0504.png" alt="Bot">
