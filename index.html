@@ -142,11 +142,13 @@
             width: 100%;
         }
 
-               .header-container {
+                   .header-container {
             display: flex;
             align-items: center;
-            justify-content: left;
+            justify-content: center;
             margin-bottom: 15px;
+            width: 100%;
+            animation: fadeInHeader 2s ease-in-out 2s forwards; /* Animation after 2 seconds */
         }
 
         .logo {
@@ -154,11 +156,31 @@
             height: 30px;
             border-radius: 50%;
             margin-right: 10px;
+            opacity: 0;
+            animation: fadeInLogo 2s ease-in-out 2s forwards; /* Animation for logo after 2 seconds */
         }
 
         h2 {
             margin: 0;
             font-size: 24px;
+            opacity: 0;
+            animation: fadeInText 2s ease-in-out 2s forwards; /* Animation for text after 2 seconds */
+        }
+
+        /* Keyframes for animations */
+        @keyframes fadeInHeader {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInLogo {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
