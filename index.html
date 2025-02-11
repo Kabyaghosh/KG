@@ -3777,7 +3777,7 @@
     // User message display
     let userMessage = `<p class="user-message">You: ${userText}</p>`;
     chatBox.innerHTML += userMessage;
-
+document.getElementById("typing-indicator").style.display = "flex";
     setTimeout(() => {
         // Bot response
         let botResponse = getResponse(userText);
@@ -3790,6 +3790,7 @@
         let botIcon = document.createElement("img");
         botIcon.src = "https://cdn-icons-png.flaticon.com/512/4712/4712033.png"; 
         botIcon.alt = "Bot";
+        typingIndicator.style.display = "none";
 
         // Bot response text
         let responseText = document.createElement("span");
@@ -3798,13 +3799,14 @@
         // Append bot icon and response text to bot message
         botMessage.appendChild(botIcon);
         botMessage.appendChild(responseText);
+        
 
         // Append bot message to chatbox
         chatBox.appendChild(botMessage);
 
         // Scroll to the latest message
         chatBox.scrollTop = chatBox.scrollHeight;
-    }, 500);
+    }, Math.random() * 2000 + 1000); // Random delay 1-3 sec
 
     inputField.value = "";
 }
