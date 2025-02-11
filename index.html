@@ -3777,11 +3777,12 @@
     // Display user message
     let userMessage = `<p class="user-message">You: ${userText}</p>`;
     chatBox.innerHTML += userMessage;
-
+    typingIndicator.style.display = "flex";
     setTimeout(() => {
         let botResponse = getResponse(userText);
+        typingIndicator.style.display = "none"; // Hide before showing response
         displayBotResponse(botResponse);
-    }, 500);
+    }, 1500); // Simulate bot typing delay
 
     inputField.value = "";
 }
