@@ -3824,7 +3824,7 @@
 
     function teachBot(userText) {
         let chatBox = document.getElementById("chat-box");
-        chatBox.innerHTML += `<p class="bot-message">Bot: I don't know this. Teach me! Type: "Teach: question | answer"</p>`;
+        chatBox.appendChild += `<p class="bot-message">Bot: I don't know this. Teach me! Type: "Teach: question | answer"</p>`;
         chatBox.scrollTop = chatBox.scrollHeight;
         return "I don't know, please teach me!";
     }
