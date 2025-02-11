@@ -3768,85 +3768,90 @@
         };
 
      function sendMessage() {
-        let inputField = document.getElementById("user-input");
-        let userText = inputField.value.trim();
-        let chatBox = document.getElementById("chat-box");
-        let typingIndicator = document.getElementById("typing-indicator");
+    let inputField = document.getElementById("user-input");
+    let userText = inputField.value.trim();
+    let chatBox = document.getElementById("chat-box");
+    let typingIndicator = document.getElementById("typing-indicator");
 
-        if (!userText) return;
+    if (!userText) return;
 
-        chatBox.innerHTML += `<p class="user-message">You: ${userText}</p>`;
-        typingIndicator.style.display = "flex";
+    // Append the user message without refreshing initial content
+    chatBox.innerHTML += `<p class="user-message">You: ${userText}</p>`;
+    typingIndicator.style.display = "flex";
 
-        setTimeout(() => {
-            let botResponse = getResponse(userText);
-            typingIndicator.style.display = "none";
-            chatBox.innerHTML += `<div class="bot-message"><img src="IMG_0504.png" alt="Bot"> <span>${botResponse}</span></div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }, 1500);
+    setTimeout(() => {
+        let botResponse = getResponse(userText);
+        typingIndicator.style.display = "none";
 
-        inputField.value = "";
-    }
-
-    function handleKeyPress(event) {
-        if (event.key === "Enter") sendMessage();
-    }
-
-    function getResponse(userText) {
-        userText = userText.toLowerCase().trim();
-        if (responses[userText]) return responses[userText];
-
-        let bestMatch = Object.keys(responses).reduce((best, key) => {
-            let score = getSimilarity(userText, key);
-            return score > best.score ? { key, score } : best;
-        }, { key: null, score: 0 });
-
-        if (bestMatch.score >= 0.5) return responses[bestMatch.key];
-        return teachBot(userText);
-    }
-
-    function getSimilarity(s1, s2) {
-        return (jaccardSimilarity(s1, s2) * 0.7) + ((1 - levenshtein(s1, s2)) * 0.3);
-    }
-
-    function levenshtein(a, b) {
-        let m = a.length, n = b.length, dp = Array.from({ length: m + 1 }, () => []);
-        for (let i = 0; i <= m; i++) for (let j = 0; j <= n; j++)
-            dp[i][j] = i === 0 ? j : j === 0 ? i : Math.min(
-                dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (a[i - 1] !== b[j - 1] ? 1 : 0));
-        return dp[m][n] / Math.max(m, n);
-    }
-
-    function jaccardSimilarity(s1, s2) {
-        let set1 = new Set(s1.split(" ")), set2 = new Set(s2.split(" "));
-        return [...set1].filter(x => set2.has(x)).length / new Set([...set1, ...set2]).size;
-    }
-
-    function teachBot(userText) {
-        let chatBox = document.getElementById("chat-box");
-        chatBox.appendChild += `<p class="bot-message">Bot: I don't know this. Teach me! Type: "Teach: question | answer"</p>`;
+        // Append bot response without refreshing initial content
+        chatBox.innerHTML += `<div class="bot-message"><img src="IMG_0504.png" alt="Bot"> <span>${botResponse}</span></div>`;
+        
+        // Keep the scroll position to show the latest message
         chatBox.scrollTop = chatBox.scrollHeight;
-        return "I don't know, please teach me!";
-    }
+    }, 1500);
 
-    function handleTeach(event) {
-        if (event.key === "Enter") {
-            let inputField = document.getElementById("user-input");
-            let userText = inputField.value.trim().toLowerCase();
+    inputField.value = "";
+}
 
-            if (userText.startsWith("teach:")) {
-                let parts = userText.substring(6).split("|");
-                if (parts.length === 2) {
-                    responses[parts[0].trim()] = parts[1].trim();
-                    localStorage.setItem("kg_chatbot", JSON.stringify(responses));
-                    document.getElementById("chat-box").innerHTML += `<p class="bot-message">Bot: Got it! I will remember this.</p>`;
-                }
-                inputField.value = "";
+function handleKeyPress(event) {
+    if (event.key === "Enter") sendMessage();
+}
+
+function getResponse(userText) {
+    userText = userText.toLowerCase().trim();
+    if (responses[userText]) return responses[userText];
+
+    let bestMatch = Object.keys(responses).reduce((best, key) => {
+        let score = getSimilarity(userText, key);
+        return score > best.score ? { key, score } : best;
+    }, { key: null, score: 0 });
+
+    if (bestMatch.score >= 0.5) return responses[bestMatch.key];
+    return teachBot(userText);
+}
+
+function getSimilarity(s1, s2) {
+    return (jaccardSimilarity(s1, s2) * 0.7) + ((1 - levenshtein(s1, s2)) * 0.3);
+}
+
+function levenshtein(a, b) {
+    let m = a.length, n = b.length, dp = Array.from({ length: m + 1 }, () => []);
+    for (let i = 0; i <= m; i++) for (let j = 0; j <= n; j++)
+        dp[i][j] = i === 0 ? j : j === 0 ? i : Math.min(
+            dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (a[i - 1] !== b[j - 1] ? 1 : 0));
+    return dp[m][n] / Math.max(m, n);
+}
+
+function jaccardSimilarity(s1, s2) {
+    let set1 = new Set(s1.split(" ")), set2 = new Set(s2.split(" "));
+    return [...set1].filter(x => set2.has(x)).length / new Set([...set1, ...set2]).size;
+}
+
+function teachBot(userText) {
+    let chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML += `<p class="bot-message">Bot: I don't know this. Teach me! Type: "Teach: question | answer"</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return "I don't know, please teach me!";
+}
+
+function handleTeach(event) {
+    if (event.key === "Enter") {
+        let inputField = document.getElementById("user-input");
+        let userText = inputField.value.trim().toLowerCase();
+
+        if (userText.startsWith("teach:")) {
+            let parts = userText.substring(6).split("|");
+            if (parts.length === 2) {
+                responses[parts[0].trim()] = parts[1].trim();
+                localStorage.setItem("kg_chatbot", JSON.stringify(responses));
+                document.getElementById("chat-box").innerHTML += `<p class="bot-message">Bot: Got it! I will remember this.</p>`;
             }
+            inputField.value = "";
         }
     }
+}
 
-   // document.addEventListener("keypress", handleTeach);
+document.addEventListener("keypress", handleTeach);
     </script>
 
 </body>
