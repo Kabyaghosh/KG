@@ -3777,7 +3777,7 @@
     // User message display
     let userMessage = `<p class="user-message">You: ${userText}</p>`;
     chatBox.innerHTML += userMessage;
-document.getElementById("typing-indicator").style.display = "flex";
+
     setTimeout(() => {
         // Bot response
         let botResponse = getResponse(userText);
@@ -3788,9 +3788,9 @@ document.getElementById("typing-indicator").style.display = "flex";
 
         // Bot icon
         let botIcon = document.createElement("img");
-        botIcon.src = "https://cdn-icons-png.flaticon.com/512/4712/4712033.png"; 
+        botIcon.src = "IMG_0504.png"; 
         botIcon.alt = "Bot";
-        typingIndicator.style.display = "none";
+        
 
         // Bot response text
         let responseText = document.createElement("span");
