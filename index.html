@@ -3767,44 +3767,21 @@
            
         };
 
-        function sendMessage() {
+       function sendMessage() {
     let inputField = document.getElementById("user-input");
     let userText = inputField.value.trim().toLowerCase();
     let chatBox = document.getElementById("chat-box");
 
     if (userText === "") return;
 
-    // User message display
+    // Display user message
     let userMessage = `<p class="user-message">You: ${userText}</p>`;
     chatBox.innerHTML += userMessage;
 
     setTimeout(() => {
-        // Bot response
         let botResponse = getResponse(userText);
-
-        // Bot message container with styling
-        let botMessage = document.createElement("div");
-        botMessage.classList.add("message", "bot-message");
-
-        // Bot icon
-        let botIcon = document.createElement("img");
-        botIcon.src = "https://cdn-icons-png.flaticon.com/512/4712/4712033.png"; 
-        botIcon.alt = "Bot";
-
-        // Bot response text
-        let responseText = document.createElement("span");
-        responseText.textContent = botResponse;
-
-        // Append bot icon and response text to bot message
-        botMessage.appendChild(botIcon);
-        botMessage.appendChild(responseText);
-
-        // Append bot message to chatbox
-        chatBox.appendChild(botMessage);
-
-        // Scroll to the latest message
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
+        displayBotResponse(botResponse);
+    }, 500);
 
     inputField.value = "";
 }
@@ -3828,42 +3805,34 @@ function getResponse(userText) {
     let bestScore = 0;
 
     for (let key in responses) {
-        let score = getSimilarity(userText, key); // Improved matching logic
-        if (score > bestScore && score >= 0.5) { // Threshold to prevent bad matches
+        let score = getSimilarity(userText, key);
+        if (score > bestScore && score >= 0.5) { 
             bestMatch = key;
             bestScore = score;
         }
     }
 
-    // If a good match is found, return it
     if (bestMatch) return responses[bestMatch];
 
     // Step 3: Teach bot if no match is found
     return teachBot(userText);
 }
 
-// Improved similarity function (combining Levenshtein & Jaccard)
+// Similarity Functions
 function getSimilarity(s1, s2) {
     let levDist = levenshtein(s1, s2);
     let jaccard = jaccardSimilarity(s1, s2);
-    
-    // Weighted scoring: 70% Jaccard, 30% Levenshtein (adjust as needed)
     return (jaccard * 0.7) + ((1 - levDist) * 0.3);
 }
 
-// Levenshtein Distance (Measures typo tolerance)
 function levenshtein(a, b) {
-    let tmp, i, j, prev, val, row;
-    if (a.length === 0) return b.length;
-    if (b.length === 0) return a.length;
+    let row = Array(b.length + 1);
+    for (let i = 0; i <= b.length; i++) row[i] = i;
     
-    row = Array(b.length + 1);
-    for (i = 0; i <= b.length; i++) row[i] = i;
-    
-    for (i = 0; i < a.length; i++) {
-        prev = i + 1;
-        for (j = 0; j < b.length; j++) {
-            val = row[j];
+    for (let i = 0; i < a.length; i++) {
+        let prev = i + 1;
+        for (let j = 0; j < b.length; j++) {
+            let val = row[j];
             if (a[i] !== b[j]) {
                 val = Math.min(row[j + 1] + 1, prev + 1, val + 1);
             }
@@ -3872,20 +3841,37 @@ function levenshtein(a, b) {
         }
         row[b.length] = prev;
     }
-    
-    return row[b.length] / Math.max(a.length, b.length); // Normalize to 0-1
+    return row[b.length] / Math.max(a.length, b.length);
 }
 
-// Jaccard Similarity (Measures intent overlap)
 function jaccardSimilarity(str1, str2) {
     let set1 = new Set(str1.split(" "));
     let set2 = new Set(str2.split(" "));
-    
     let intersection = new Set([...set1].filter(x => set2.has(x)));
     let union = new Set([...set1, ...set2]);
-    
-    return intersection.size / union.size; // 0-1 score
+    return intersection.size / union.size;
 }
+
+// Display bot response with an icon
+function displayBotResponse(botResponse) {
+    let chatBox = document.getElementById("chat-box");
+    let botMessage = document.createElement("div");
+    botMessage.classList.add("message", "bot-message");
+
+    let botIcon = document.createElement("img");
+    botIcon.src = "IMG_0504.png"; 
+    botIcon.alt = "Bot";
+
+    let responseText = document.createElement("span");
+    responseText.textContent = botResponse;
+
+    botMessage.appendChild(botIcon);
+    botMessage.appendChild(responseText);
+    chatBox.appendChild(botMessage);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
 
 function isMathExpression(text) {
     return /^[0-9+\-*/().\s]+$/.test(text);
