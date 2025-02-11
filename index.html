@@ -192,13 +192,7 @@
                         <div class="header-container">
             <img src="IMG_0504.png" alt="Bot Logo" class="logo">
             <h2>KGs1 Beta</h2>
-        </div>
-        <div class="chat-box" id="chat-box">
-            <div class="message bot-message">
-                <img src="IMG_0504.png" alt="Bot">
-                <span>Hello! I am KGs1. Ask me about Bangladesh!</span>
-            </div>
-        </div>
+
         
         <div class="typing-indicator" id="typing-indicator">
             <span></span><span></span><span></span>
@@ -3766,6 +3760,12 @@
 
            
         };
+        // Add an initial message from the bot
+window.onload = function() {
+    let chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML += `<div class="bot-message"><img src="IMG_0504.png" alt="Bot"> <span>Hey, I'm KGs1. Ask me anything about BD!</span></div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+};
 
      function sendMessage() {
     let inputField = document.getElementById("user-input");
